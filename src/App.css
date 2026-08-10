@@ -1,0 +1,381 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #f7fbfc, #eef6f8);
+  color: #222;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 15px;
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.97);
+  padding: 35px;
+  border-radius: 28px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.logo {
+  display: block;
+  width: 260px;
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto 15px;
+  border-radius: 10px;
+}
+
+.divider {
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    #ed5b32,
+    #1689aa
+  );
+  border-radius: 10px;
+  margin: 10px auto 25px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+  margin: 0;
+}
+
+.subtitle {
+  text-align: center;
+  color: #777;
+  margin: 10px 0 30px;
+  font-size: 16px;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0 10px;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 5px 0;
+}
+
+.star {
+  border: none;
+  background: transparent;
+  font-size: 46px;
+  color: #d7d7d7;
+  cursor: pointer;
+  transition: 0.2s;
+  padding: 0 3px;
+}
+
+.star:hover {
+  transform: scale(1.15);
+}
+
+.star.active {
+  color: #f5b400;
+}
+
+.rating-text {
+  text-align: center;
+  color: #1689aa;
+  font-weight: 700;
+  min-height: 22px;
+  margin-top: 5px;
+}
+
+textarea,
+input {
+  width: 100%;
+  border: 1px solid #000000;
+  border-radius: 14px;
+  padding: 15px;
+  font-size: 16px;
+  outline: none;
+  background: #e4dddd;
+  transition: 0.2s;
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+textarea:focus,
+input:focus {
+  border-color: #1689aa;
+  background: rgb(244, 237, 237);
+  box-shadow: 0 0 0 3px rgba(22, 137, 170, 0.1);
+}
+
+.submit-button {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 25px;
+  background: linear-gradient(
+    90deg,
+    #ed5b32,
+    #e84f29
+  );
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(237, 91, 50, 0.25);
+}
+
+.privacy {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin: 20px 0 0;
+}
+
+.success-card {
+  text-align: center;
+}
+
+.success-card h1 {
+  margin-top: 15px;
+}
+
+.success-card p {
+  color: #777;
+  line-height: 1.6;
+}
+
+.success-icon {
+  width: 70px;
+  height: 70px;
+  margin: 15px auto;
+  border-radius: 50%;
+  background: #1689aa;
+  color: rgb(233, 224, 224);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  font-weight: bold;
+}
+textarea,
+input {
+  color: #222;
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: #999;
+}
+.card h1{
+  color: #000;
+}
+.page {
+  min-height: 100vh;
+  background-image: url("./assets/Gemini_Generated_Image_mljw0omljw0omljw.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+
+@media (max-width: 500px) {
+  .page {
+    padding: 15px;
+  }
+
+  .card {
+    padding: 25px 20px;
+    border-radius: 22px;
+  }
+
+  .logo {
+    width: 230px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .star {
+    font-size: 40px;
+  }
+}
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Шапка */
+.admin-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.admin-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 15px;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+/* Сетка отзывов */
+.admin-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-header {
+  width: 100%;
+}
+
+/* Сами отзывы */
+.admin-card {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 18px;
+  padding: 22px;
+  box-sizing: border-box;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Контейнер для карточек */
+.admin-card:not(:first-child) {
+  margin-bottom: 0;
+}
+
+/* Делаем отзывы сеткой */
+.admin-container > .admin-card {
+  margin-bottom: 0;
+}
+
+/* Если отзывов несколько */
+.admin-container {
+  gap: 18px;
+}
+
+/* Оценка */
+.admin-rating {
+  font-size: 21px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+/* Имя */
+.admin-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+/* Текст */
+.admin-review {
+  margin: 0 0 15px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  overflow-wrap: anywhere;
+}
+
+/* Дата */
+.admin-card small {
+  color: #888;
+  font-size: 12px;
+}
+
+/* Кнопка выхода */
+.logout-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #111;
+  color: white;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+/* Сетка через CSS Grid */
+@media (min-width: 601px) {
+  .admin-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .admin-header {
+    grid-column: 1 / -1;
+  }
+}
+
+/* 2 карточки */
+@media (min-width: 601px) and (max-width: 950px) {
+  .admin-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Телефон */
+@media (max-width: 600px) {
+  .admin-container {
+    padding: 25px 14px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .admin-header h1 {
+    font-size: 24px;
+  }
+
+  .admin-card {
+    width: 100%;
+  }
+}
+.admin-rating {
+  color: #f5b301;
+  font-size: 21px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
