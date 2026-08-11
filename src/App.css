@@ -1,381 +1,685 @@
-* {
-  box-sizing: border-box;
+/* ============================================
+   SOLEMAR REVIEWS — Modern Glassmorphism UI
+   ============================================ */
+
+/* ---- Keyframe Animations ---- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #f7fbfc, #eef6f8);
-  color: #222;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-button,
-input,
-textarea {
-  font-family: inherit;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes successPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes starBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.35); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* ---- Page Layout ---- */
 .page {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 25px 15px;
+  padding: 32px 20px;
+  position: relative;
+  overflow: hidden;
 }
 
+.page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("./assets/Gemini_Generated_Image_mljw0omljw0omljw.png");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.35) 0%,
+    rgba(15, 23, 42, 0.2) 40%,
+    rgba(15, 23, 42, 0.45) 100%
+  );
+  z-index: 0;
+}
+
+/* ---- Card ---- */
 .card {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 520px;
-  background: rgba(255, 255, 255, 0.97);
-  padding: 35px;
-  border-radius: 28px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+  max-width: 480px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-xl);
+  padding: 40px 36px;
+  box-shadow: var(--shadow-xl);
+  animation: fadeInUp 0.7s var(--ease-out) both;
 }
 
+/* ---- Logo ---- */
 .logo {
   display: block;
-  width: 260px;
-  max-width: 90%;
+  width: 200px;
+  max-width: 70%;
   height: auto;
-  margin: 0 auto 15px;
-  border-radius: 10px;
+  margin: 0 auto 8px;
+  border-radius: var(--radius-sm);
+  transition: transform var(--duration-normal) var(--ease-out);
 }
 
+.logo:hover {
+  transform: scale(1.03);
+}
+
+/* ---- Divider ---- */
 .divider {
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(
-    90deg,
-    #ed5b32,
-    #1689aa
-  );
-  border-radius: 10px;
-  margin: 10px auto 25px;
+  width: 48px;
+  height: 3px;
+  margin: 12px auto 28px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--orange), var(--blue));
+  opacity: 0.85;
 }
 
+/* ---- Typography ---- */
 h1 {
   text-align: center;
-  font-size: 28px;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.4px;
+  line-height: 1.3;
   margin: 0;
 }
 
 .subtitle {
   text-align: center;
-  color: #777;
-  margin: 10px 0 30px;
-  font-size: 16px;
+  color: var(--gray-500);
+  font-size: 0.925rem;
+  font-weight: 400;
+  margin: 8px 0 28px;
+  line-height: 1.5;
+}
+
+/* ---- Form ---- */
+form {
+  display: flex;
+  flex-direction: column;
 }
 
 label {
   display: block;
-  font-size: 16px;
-  font-weight: 700;
-  margin: 20px 0 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  margin: 20px 0 8px;
 }
 
+label:first-of-type {
+  margin-top: 0;
+}
+
+/* ---- Stars ---- */
 .stars {
   display: flex;
   justify-content: center;
-  gap: 5px;
-  margin: 5px 0;
+  gap: 6px;
+  padding: 8px 0 4px;
 }
 
 .star {
   border: none;
   background: transparent;
-  font-size: 46px;
-  color: #d7d7d7;
+  font-size: 40px;
+  color: var(--gray-300);
   cursor: pointer;
-  transition: 0.2s;
-  padding: 0 3px;
+  transition: color var(--duration-fast) ease,
+              transform var(--duration-fast) var(--ease-spring);
+  padding: 2px 4px;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .star:hover {
-  transform: scale(1.15);
+  transform: scale(1.2);
+  color: var(--gold-light);
 }
 
 .star.active {
-  color: #f5b400;
+  color: var(--gold);
+  animation: starBounce 0.35s var(--ease-spring);
 }
 
+/* Rating text */
 .rating-text {
   text-align: center;
-  color: #1689aa;
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--blue);
   min-height: 22px;
-  margin-top: 5px;
+  margin: 4px 0 4px;
+  animation: slideDown 0.25s var(--ease-out) both;
 }
 
+/* ---- Inputs ---- */
 textarea,
-input {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   width: 100%;
-  border: 1px solid #000000;
-  border-radius: 14px;
-  padding: 15px;
-  font-size: 16px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: var(--gray-800);
+  background: rgba(255, 255, 255, 0.7);
   outline: none;
-  background: #e4dddd;
-  transition: 0.2s;
+  transition: border-color var(--duration-fast) ease,
+              background var(--duration-fast) ease,
+              box-shadow var(--duration-fast) ease;
+  line-height: 1.5;
 }
 
 textarea {
-  min-height: 140px;
+  min-height: 120px;
   resize: vertical;
-}
-
-textarea:focus,
-input:focus {
-  border-color: #1689aa;
-  background: rgb(244, 237, 237);
-  box-shadow: 0 0 0 3px rgba(22, 137, 170, 0.1);
-}
-
-.submit-button {
-  width: 100%;
-  border: none;
-  border-radius: 14px;
-  padding: 16px;
-  margin-top: 25px;
-  background: linear-gradient(
-    90deg,
-    #ed5b32,
-    #e84f29
-  );
-  color: white;
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.submit-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(237, 91, 50, 0.25);
-}
-
-.privacy {
-  text-align: center;
-  color: #999;
-  font-size: 12px;
-  margin: 20px 0 0;
-}
-
-.success-card {
-  text-align: center;
-}
-
-.success-card h1 {
-  margin-top: 15px;
-}
-
-.success-card p {
-  color: #777;
-  line-height: 1.6;
-}
-
-.success-icon {
-  width: 70px;
-  height: 70px;
-  margin: 15px auto;
-  border-radius: 50%;
-  background: #1689aa;
-  color: rgb(233, 224, 224);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  font-weight: bold;
-}
-textarea,
-input {
-  color: #222;
 }
 
 textarea::placeholder,
 input::placeholder {
-  color: #999;
-}
-.card h1{
-  color: #000;
-}
-.page {
-  min-height: 100vh;
-  background-image: url("./assets/Gemini_Generated_Image_mljw0omljw0omljw.png");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  color: var(--gray-400);
+  font-weight: 400;
 }
 
-
-@media (max-width: 500px) {
-  .page {
-    padding: 15px;
-  }
-
-  .card {
-    padding: 25px 20px;
-    border-radius: 22px;
-  }
-
-  .logo {
-    width: 230px;
-  }
-
-  h1 {
-    font-size: 24px;
-  }
-
-  .star {
-    font-size: 40px;
-  }
+textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: var(--blue);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 4px rgba(22, 137, 170, 0.1);
 }
+
+/* ---- Submit Button ---- */
+.submit-button {
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 15px 24px;
+  margin-top: 24px;
+  background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-orange);
+}
+
+.submit-button:hover::before {
+  left: 100%;
+}
+
+.submit-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---- Privacy ---- */
+.privacy {
+  text-align: center;
+  color: var(--gray-400);
+  font-size: 0.75rem;
+  margin: 20px 0 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   SUCCESS STATE
+   ============================================ */
+.success-card {
+  text-align: center;
+  animation: scaleIn 0.5s var(--ease-out) both;
+}
+
+.success-card h1 {
+  margin-top: 12px;
+  font-size: 1.6rem;
+}
+
+.success-card p {
+  color: var(--gray-500);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  margin: 20px auto 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--success), var(--success-light));
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  font-weight: 700;
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.3);
+  animation: successPop 0.6s var(--ease-spring) 0.15s both;
+}
+
+/* ============================================
+   ADMIN — LOGIN
+   ============================================ */
+/* (uses same .card styles) */
+
+/* ============================================
+   ADMIN — DASHBOARD
+   ============================================ */
 .admin-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
-}
-
-/* Шапка */
-.admin-header {
+  padding: 32px 24px 48px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.5s var(--ease-out) both;
+}
+
+/* ---- Admin Header ---- */
+.admin-header {
+  display: flex;
   align-items: center;
-  text-align: center;
-  margin-bottom: 40px;
+  justify-content: space-between;
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.admin-header > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .admin-logo {
-  width: 120px;
-  height: 120px;
+  width: 52px;
+  height: 52px;
   object-fit: cover;
   border-radius: 50%;
-  display: block;
-  margin: 0 auto 15px;
+  border: 2px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-header h1 {
-  margin: 0;
-  font-size: 30px;
+  text-align: left;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.3px;
 }
 
-/* Сетка отзывов */
-.admin-container {
-  display: flex;
-  flex-direction: column;
+/* ---- Logout Button ---- */
+.logout-button {
+  padding: 10px 20px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--gray-700);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
 }
 
-.admin-header {
-  width: 100%;
+.logout-button:hover {
+  background: var(--gray-900);
+  color: var(--white);
+  border-color: var(--gray-900);
+  box-shadow: var(--shadow-md);
 }
 
-/* Сами отзывы */
-.admin-card {
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 18px;
-  padding: 22px;
-  box-sizing: border-box;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-/* Контейнер для карточек */
-.admin-card:not(:first-child) {
-  margin-bottom: 0;
-}
-
-/* Делаем отзывы сеткой */
-.admin-container > .admin-card {
-  margin-bottom: 0;
-}
-
-/* Если отзывов несколько */
-.admin-container {
+/* ---- Review Cards Grid ---- */
+.admin-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
-/* Оценка */
+/* ---- Admin Review Card ---- */
+.admin-card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out),
+              border-color var(--duration-normal) ease;
+  animation: fadeInUp 0.5s var(--ease-out) both;
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(22, 137, 170, 0.2);
+}
+
+/* Stagger animation */
+.admin-card:nth-child(1) { animation-delay: 0.05s; }
+.admin-card:nth-child(2) { animation-delay: 0.1s; }
+.admin-card:nth-child(3) { animation-delay: 0.15s; }
+.admin-card:nth-child(4) { animation-delay: 0.2s; }
+.admin-card:nth-child(5) { animation-delay: 0.25s; }
+.admin-card:nth-child(6) { animation-delay: 0.3s; }
+.admin-card:nth-child(7) { animation-delay: 0.35s; }
+.admin-card:nth-child(8) { animation-delay: 0.4s; }
+.admin-card:nth-child(9) { animation-delay: 0.45s; }
+
+/* ---- Rating Stars ---- */
 .admin-rating {
-  font-size: 21px;
+  color: var(--gold);
+  font-size: 1.15rem;
   letter-spacing: 2px;
   margin-bottom: 12px;
 }
 
-/* Имя */
+/* ---- Name ---- */
 .admin-card h3 {
   margin: 0 0 10px;
-  font-size: 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-800);
 }
 
-/* Текст */
+/* ---- Review Text ---- */
 .admin-review {
-  margin: 0 0 15px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #333;
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--gray-600);
   overflow-wrap: anywhere;
 }
 
-/* Дата */
+/* ---- Date ---- */
 .admin-card small {
-  color: #888;
-  font-size: 12px;
+  color: var(--gray-400);
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-/* Кнопка выхода */
-.logout-button {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 10px;
-  background: #111;
-  color: white;
-  cursor: pointer;
-  margin-top: 15px;
+/* ---- Empty / Loading State ---- */
+.admin-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-500);
+  font-size: 0.95rem;
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
 }
 
-/* Сетка через CSS Grid */
-@media (min-width: 601px) {
-  .admin-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-
-  .admin-header {
-    grid-column: 1 / -1;
-  }
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  gap: 16px;
+  color: var(--gray-500);
+  font-size: 0.95rem;
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
 }
 
-/* 2 карточки */
-@media (min-width: 601px) and (max-width: 950px) {
-  .admin-container {
+.loading-spinner::before {
+  content: '';
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Stats Bar ---- */
+.admin-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 140px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  animation: fadeInUp 0.5s var(--ease-out) both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.1s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  line-height: 1.2;
+}
+
+.stat-value.orange { color: var(--orange); }
+.stat-value.blue { color: var(--blue); }
+.stat-value.gold { color: var(--gold); }
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 950px) {
+  .admin-reviews-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Телефон */
 @media (max-width: 600px) {
-  .admin-container {
-    padding: 25px 14px;
-    display: flex;
-    flex-direction: column;
+  .page {
+    padding: 16px 12px;
+    align-items: flex-start;
+    padding-top: 32px;
   }
 
-  .admin-logo {
-    width: 100px;
-    height: 100px;
+  .card {
+    padding: 28px 22px;
+    border-radius: var(--radius-lg);
+  }
+
+  .logo {
+    width: 180px;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+  }
+
+  .star {
+    font-size: 34px;
+  }
+
+  .admin-container {
+    padding: 16px 12px 32px;
+    gap: 14px;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 18px 20px;
+  }
+
+  .admin-header > div {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .admin-header h1 {
-    font-size: 24px;
+    text-align: center;
+    font-size: 1.15rem;
   }
 
-  .admin-card {
-    width: 100%;
+  .admin-reviews-grid {
+    grid-template-columns: 1fr;
   }
-}
-.admin-rating {
-  color: #f5b301;
-  font-size: 21px;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
+
+  .admin-stats {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    min-width: auto;
+  }
 }

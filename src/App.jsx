@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "./App.css";
 import logo from "./assets/solemar logo.jpg";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+  import.meta.env.VITE_SUPABASE_ANON_KEY // Изменено название ключа
 );
+
+const RATING_LABELS = {
+  1: "Очень плохо",
+  2: "Плохо",
+  3: "Нормально",
+  4: "Хорошо",
+  5: "Отлично!",
+};
 
 function ReviewForm() {
   const [rating, setRating] = useState(0);
+  const [hoveredStar, setHoveredStar] = useState(0);
   const [review, setReview] = useState("");
   const [name, setName] = useState("");
   const [sent, setSent] = useState(false);
@@ -81,6 +90,8 @@ function ReviewForm() {
     );
   }
 
+  const displayRating = hoveredStar || rating;
+
   return (
     <main className="page">
       <div className="card">
@@ -102,21 +113,20 @@ function ReviewForm() {
               <button
                 key={star}
                 type="button"
-                className={star <= rating ? "star active" : "star"}
+                className={star <= displayRating ? "star active" : "star"}
                 onClick={() => setRating(star)}
+                onMouseEnter={() => setHoveredStar(star)}
+                onMouseLeave={() => setHoveredStar(0)}
+                aria-label={`${star} из 5`}
               >
                 ★
               </button>
             ))}
           </div>
 
-          {rating > 0 && (
-            <div className="rating-text">
-              {rating === 1 && "Очень плохо"}
-              {rating === 2 && "Плохо"}
-              {rating === 3 && "Нормально"}
-              {rating === 4 && "Хорошо"}
-              {rating === 5 && "Отлично!"}
+          {displayRating > 0 && (
+            <div className="rating-text" key={displayRating}>
+              {RATING_LABELS[displayRating]}
             </div>
           )}
 
@@ -162,42 +172,77 @@ function Admin() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  async function checkUser() {
+  const stats = useMemo(() => {
+    if (reviews.length === 0) return null;
+    const total = reviews.length;
+    const avg = (
+      reviews.reduce((sum, r) => sum + r.rating, 0) / total
+    ).toFixed(1);
+    const fiveStars = reviews.filter((r) => r.rating === 5).length;
+    return { total, avg, fiveStars };
+  }, [reviews]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchReviews() {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (cancelled) return;
+
+      if (error) {
+        console.error(error);
+        alert("Не удалось загрузить отзывы");
+      } else {
+        setReviews(data || []);
+      }
+
+      setLoading(false);
+    }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (cancelled) return;
+
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      setAuthChecked(true);
+
+      if (currentUser) {
+        fetchReviews();
+      } else {
+        setLoading(false);
+      }
+    });
+
     const {
-      data: { user },
-    } = await supabase.auth.getUser();
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (cancelled) return;
 
-    setUser(user);
-  }
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      setAuthChecked(true);
 
-  async function loadReviews() {
-    setLoading(true);
+      if (currentUser) {
+        fetchReviews();
+      } else {
+        setReviews([]);
+        setLoading(false);
+      }
+    });
 
-    const { data, error } = await supabase
-      .from("reviews")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      alert("Не удалось загрузить отзывы");
-    } else {
-      setReviews(data || []);
-    }
-
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    checkUser();
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      loadReviews();
-    }
-  }, [user]);
 
   async function login(e) {
     e.preventDefault();
@@ -211,8 +256,6 @@ function Admin() {
     if (error) {
       alert("Неверная почта или пароль");
       console.error(error);
-    } else {
-      await checkUser();
     }
 
     setAuthLoading(false);
@@ -224,6 +267,20 @@ function Admin() {
     setReviews([]);
   }
 
+  /* Auth check loading */
+  if (!authChecked) {
+    return (
+      <main className="page">
+        <div className="card" style={{ textAlign: 'center' }}>
+          <img src={logo} className="logo" alt="Solemar" />
+          <div className="divider"></div>
+          <p className="subtitle">Загрузка...</p>
+        </div>
+      </main>
+    );
+  }
+
+  /* Login form */
   if (!user) {
     return (
       <main className="page">
@@ -272,6 +329,7 @@ function Admin() {
     );
   }
 
+  /* Dashboard */
   return (
     <main className="page">
       <div className="admin-container">
@@ -282,7 +340,6 @@ function Admin() {
               className="admin-logo"
               alt="Solemar"
             />
-
             <h1>Отзывы Solemar</h1>
           </div>
 
@@ -294,38 +351,59 @@ function Admin() {
           </button>
         </div>
 
+        {/* Stats */}
+        {stats && (
+          <div className="admin-stats">
+            <div className="stat-card">
+              <div className="stat-value blue">{stats.total}</div>
+              <div className="stat-label">Всего отзывов</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-value gold">★ {stats.avg}</div>
+              <div className="stat-label">Средняя оценка</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-value orange">{stats.fiveStars}</div>
+              <div className="stat-label">Оценок «5»</div>
+            </div>
+          </div>
+        )}
+
+        {/* Reviews */}
         {loading ? (
-          <div className="admin-card">
-            <p>Загрузка отзывов...</p>
+          <div className="loading-spinner">
+            Загрузка отзывов...
           </div>
         ) : reviews.length === 0 ? (
-          <div className="admin-card">
+          <div className="admin-empty">
             <p>Пока отзывов нет.</p>
           </div>
         ) : (
-          reviews.map((item) => (
-            <div
-              className="admin-card"
-              key={item.id}
-            >
-              <div className="admin-rating">
-                {"★".repeat(item.rating)}
-                {"☆".repeat(5 - item.rating)}
+          <div className="admin-reviews-grid">
+            {reviews.map((item) => (
+              <div
+                className="admin-card"
+                key={item.id}
+              >
+                <div className="admin-rating">
+                  {"★".repeat(item.rating)}
+                  {"☆".repeat(5 - item.rating)}
+                </div>
+
+                <h3>{item.name || "Гость"}</h3>
+
+                <p className="admin-review">
+                  {item.review}
+                </p>
+
+                <small>
+                  {new Date(item.created_at).toLocaleString(
+                    "ru-RU"
+                  )}
+                </small>
               </div>
-
-              <h3>{item.name || "Гость"}</h3>
-
-              <p className="admin-review">
-                {item.review}
-              </p>
-
-              <small>
-                {new Date(item.created_at).toLocaleString(
-                  "ru-RU"
-                )}
-              </small>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
     </main>
